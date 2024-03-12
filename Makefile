@@ -38,7 +38,7 @@ PORT_COMP_TARG = GCC/ARM_CA57_64_BIT/
 OBJDIR = obj/
 
 # FreeRTOS source base directory
-FREERTOS_SRC = ./FreeRTOS/Source/
+FREERTOS_SRC = ./FreeRTOS/v10.6.2/
 
 # Directory with memory management source files
 FREERTOS_MEMMANG_SRC = $(FREERTOS_SRC)portable/MemMang/
@@ -47,7 +47,8 @@ FREERTOS_MEMMANG_SRC = $(FREERTOS_SRC)portable/MemMang/
 FREERTOS_PORT_SRC = $(FREERTOS_SRC)portable/$(PORT_COMP_TARG)
 
 # Directory with Application source files
-APP_SRC = ./FreeRTOS/Demo/CORTEX_A57_64-bit/
+# APP_SRC = ./FreeRTOS/Demo/CORTEX_A57_64-bit/
+APP_SRC = ./Demo/CORTEX_A57_64-bit/
 
 # Due to a large number, the .o files are arranged into logical groups:
 
