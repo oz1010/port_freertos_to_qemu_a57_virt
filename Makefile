@@ -11,7 +11,7 @@ CC = $(CROSS)-gcc
 AS = $(CROSS)-as
 LD = $(CROSS)-ld
 OBJDUMP = $(CROSS)-objdump
-CFLAGS = -mcpu=cortex-a57 -ffreestanding -Wall -Wextra -g -DGUEST
+CFLAGS = -mcpu=cortex-a57 -ffreestanding -Wall -Wextra -g -O0 -DGUEST
 #	-mcpu=name
 #		Specify the name of the target processor
 #	-Wall
@@ -56,9 +56,9 @@ FREERTOS_OBJS = queue.o list.o tasks.o
 # The following o. files are only necessary if
 # certain options are enabled in FreeRTOSConfig.h
 FREERTOS_OBJS += timers.o
-#FREERTOS_OBJS += croutine.o
-#FREERTOS_OBJS += event_groups.o
-#FREERTOS_OBJS += stream_buffer.o
+FREERTOS_OBJS += croutine.o
+FREERTOS_OBJS += event_groups.o
+FREERTOS_OBJS += stream_buffer.o
 
 # Only one memory management .o file must be uncommented!
 FREERTOS_MEMMANG_OBJS = heap_1.o
@@ -96,7 +96,7 @@ all: $(OBJDIR) $(ELF_IMAGE)
 $(OBJDIR) :
 	mkdir -p $@
 
-$(ELF_IMAGE): $(APP_SRC)linker.ld $(OBJS)
+$(ELF_IMAGE): $(OBJS)
 	$(LD) -T $(APP_SRC)linker.ld $^ -o $@
 	$(OBJDUMP) -D $(ELF_IMAGE) > image.list
 
@@ -131,6 +131,10 @@ run:
 	$(MAKE) all
 	# qemu-system-aarch64 -machine virt -cpu cortex-a57 -m 128 -serial stdio -nographic -nodefaults -kernel kernel.elf
 	qemu-system-aarch64 -machine virt -cpu cortex-a57 -nographic -kernel $(ELF_IMAGE)
+
+debug:
+	$(MAKE) all
+	qemu-system-aarch64 -machine virt -cpu cortex-a57 -nographic -kernel $(ELF_IMAGE) -s -S
 
 gen_tags: clean_tags
 	./gen_tags.sh
